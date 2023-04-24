@@ -20,6 +20,8 @@ const webLogPath = "az";
 
 app.use(`/${webLogPath}`, express.static(path.join(__dirname, "webLogs")));
 
+app.get("/", (_, res) => res.send("CNR - Robotique FSR"));
+
 app.use((req, _res, next) => {
   const ipAddress = getIPV4(req.socket.remoteAddress);
   req.participantIP = ipAddress;
@@ -40,10 +42,6 @@ app.use((req, res, next) => {
   } else {
     next();
   }
-});
-
-app.get("/", (_, res) => {
-  res.send("CNR - Robotique FSR");
 });
 
 app.get("/START", (req, res) => {
