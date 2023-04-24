@@ -12,10 +12,20 @@ const getRandomColorDifferentThanThePrevious = (lastColor) => {
   let color;
 
   do {
-    color = getRandomColor()
-  }while(color === lastColor)
+    color = getRandomColor();
+  } while (color === lastColor);
 
-  return color
-}
+  return color;
+};
 
-module.exports = { getIPV4, getRandomColor, getRandomColorDifferentThanThePrevious };
+const emitLog = (io, message) => {
+  io.emit("LOG", { message });
+  console.log(message);
+};
+
+module.exports = {
+  getIPV4,
+  getRandomColor,
+  getRandomColorDifferentThanThePrevious,
+  emitLog,
+};

@@ -1,11 +1,24 @@
 const express = require("express");
-const { getIPV4, getRandomColorDifferentThanThePrevious } = require("./utils");
+const { Server: SocketIOServer } = require("socket.io");
+const http = require("http");
+const path = require("path");
+const {
+  getIPV4,
+  getRandomColorDifferentThanThePrevious,
+  emitLog,
+} = require("./utils");
 
 const app = express();
+const server = http.createServer(app);
+const io = new SocketIOServer(server);
 
 const PORT = 80;
 
 const usersLastColor = new Map();
+
+const webLogPath = "az";
+
+app.use(`/${webLogPath}`, express.static(path.join(__dirname, "webLogs")));
 
 app.use((req, _res, next) => {
   const ipAddress = getIPV4(req.socket.remoteAddress);
@@ -19,7 +32,8 @@ app.use((req, _res, next) => {
 app.use((req, res, next) => {
   const userAgent = req.headers["user-agent"];
   if (typeof userAgent === "string" && /^Mozilla/.test(userAgent)) {
-    console.log(
+    emitLog(
+      io,
       `[${req.participantIP}] has been blocked (coming from a browser)`
     );
     res.send("Unauthorized.");
@@ -33,8 +47,8 @@ app.get("/", (_, res) => {
 });
 
 app.get("/START", (req, res) => {
-  console.log(`[${req.participantIP}] requested /START`);
-  console.log(`[${req.participantIP}] received MOVE`);
+  emitLog(io, `[${req.participantIP}] requested /START`);
+  emitLog(io, `[${req.participantIP}] received MOVE`);
   res.send("MOVE");
 });
 
@@ -43,8 +57,8 @@ app.get("/ZONE1", (req, res) => {
   const color = getRandomColorDifferentThanThePrevious(lastColor);
   usersLastColor.set(req.participantIP, color);
 
-  console.log(`[${req.participantIP}] requested /ZONE1`);
-  console.log(`[${req.participantIP}] received ${color}`);
+  emitLog(io, `[${req.participantIP}] requested /ZONE1`);
+  emitLog(io, `[${req.participantIP}] received ${color}`);
   res.send(`${color}`);
 });
 
@@ -53,17 +67,18 @@ app.get("/ZONE2", (req, res) => {
   const color = getRandomColorDifferentThanThePrevious(lastColor);
   usersLastColor.set(req.participantIP, color);
 
-  console.log(`[${req.participantIP}] requested /ZONE2`);
-  console.log(`[${req.participantIP}] received ${color}`);
+  emitLog(io, `[${req.participantIP}] requested /ZONE2`);
+  emitLog(io, `[${req.participantIP}] received ${color}`);
   res.send(`${color}`);
 });
 
 app.get("/DONE", (req, res) => {
-  console.log(`[${req.participantIP}] requested /DONE`);
-  console.log(`[${req.participantIP}] received GOOD`);
+  emitLog(io, `[${req.participantIP}] requested /DONE`);
+  emitLog(io, `[${req.participantIP}] received GOOD`);
   res.send("GOOD");
 });
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log("Server listening on PORT", PORT);
+  console.log(`Web logs http://localhost:${PORT}/${webLogPath}`);
 });

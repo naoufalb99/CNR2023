@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: sans-serif;
+      color: #49576E;
+      line-height: 2;
+    }
+    .container {
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .ip {
+      color: #5C4BBD
+    }
+    .url {
+      color: #df5424
+    }
+    .color {
+      border: 1px solid #999;
+      border-radius: 3px;
+      padding: 2px;
+    }
+    .search {
+      margin-bottom: 32px;
+      display: flex;
+      gap: 8px;
+    }
+    .search input {
+      height: 40px;
+      padding: 8px;
+      border: 1px solid #DDD;
+      border-radius: 3px;
+      font-family: sans-serif;
+      color: #49576E;
+      width: 100%;
+      max-width: 300px;
+    }
+    .search button {
+      border: none;
+      background: #0272B7;
+      border-radius: 3px;
+      color: #FFF;
+      padding: 0 16px;
+      cursor: pointer;
+      font-family: sans-serif;
+    }
+    #logs {
+      border-radius: 3px;
+      border: 1px solid #DDD;
+      padding: 16px
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>CNR - Server Logs</h1>
+    <div class="search">
+      <input placeholder="Filter by IP" />
+      <button type="button">Filter</button>
+    </div>
+    <div id="logs">
+  </div>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
