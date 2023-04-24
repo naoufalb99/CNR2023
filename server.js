@@ -34,7 +34,7 @@ app.use((req, res, next) => {
   if (typeof userAgent === "string" && /^Mozilla/.test(userAgent)) {
     emitLog(
       io,
-      `[${req.participantIP}] has been blocked (coming from a browser)`
+      `[${req.participantIP}] ${req.path} has been blocked (coming from a browser)`
     );
     res.send("Unauthorized.");
   } else {
